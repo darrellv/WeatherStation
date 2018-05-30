@@ -36,6 +36,8 @@ namespace WeatherStation
 
                 config.Save(ConfigurationSaveMode.Modified);
             }
+            else
+                Console.WriteLine("Wait {0} more minutes and then try again.", (lastTimeCalled.AddMinutes(11) - DateTime.Now).Minutes.ToString());
 
             Console.ReadLine();
         }
