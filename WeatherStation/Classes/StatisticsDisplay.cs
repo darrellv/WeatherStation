@@ -5,25 +5,29 @@ using WeatherStation.Interfaces;
 
 namespace WeatherStation.Classes
 {
-    class StatisticsDisplay : IObserver, IDisplayElement 
+    class StatisticsDisplay : IObserver, IDisplayElement
     {
         private float temperature { get; set; }
         private float humidity { get; set; }
-        private ISubject weatherData;
+        private Observable observable;
 
-        public StatisticsDisplay(ISubject wd)
+        public StatisticsDisplay(Observable obs)
         {
-            weatherData = wd;
-            weatherData.RegisterObserver(this);
-
+            observable = obs;
+            observable.AddObserver(this);
 
         }
 
-        public void Update(float temp, float hum, float pres)
+        public void Update(Observable obs, Object arg)
         {
-            temperature = temp;
-            humidity = hum;
-            Display();
+            if (obs is WeatherData)
+            {
+                WeatherData wd = (WeatherData)obs;
+
+                temperature = wd.GetTemperature();
+                humidity = wd.GetHumidity();
+                Display();
+            }
         }
 
         public void Display()
